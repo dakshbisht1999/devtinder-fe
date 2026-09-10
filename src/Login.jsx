@@ -1,4 +1,32 @@
+import { useState } from "react";
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [emailError, setEmailError] = useState("");
+
+    const validateEmail = (value) => {
+        const error = !value.trim()
+            ? "Required"
+            : !emailPattern.test(value)
+                ? "Enter a valid email password"
+                : "";
+
+        setEmailError(error);
+        return !error;
+    };
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        validateEmail(email);
+    };
+
+    const handleReset = () => {
+        setEmail("");
+        setEmailError("");
+    };
+
     return (
         <>
             {/* <h1>Login Page</h1> */}
@@ -14,13 +42,24 @@ const Login = () => {
                             LOGIN @DevTinder
                         </h2>
 
-                        <form className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+                        <form className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
+                            noValidate onSubmit={handleSubmit} onReset={handleReset}>
                             <fieldset className="fieldset">
                                 <label className="label">Email</label>
-                                <input type="email" className="input validator" placeholder="Email" required />
-                                <p className="validator-hint hidden">
-                                    Required
-                                </p>
+                                <input
+                                    type="email"
+                                    className="input validator"
+                                    placeholder="Email"
+                                    value={email}
+                                    onChange={(event) => {
+                                        const value = event.target.value;
+                                        setEmail(value);
+                                        if (emailError) validateEmail(value);
+                                    }}
+                                    onBlur={(event) => validateEmail(event.target.value)}
+                                    aria-invalid={Boolean(emailError)}
+                                />
+                                {emailError && <p className="validator-hint">{emailError}</p>}
                             </fieldset>
 
                             <label className="fieldset">
