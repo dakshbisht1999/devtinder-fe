@@ -1,8 +1,19 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Body from './Body';
 import Login from './Login';
 import Profile from './Profile';
+import ResetPassword from './ResetPassword';
+import { isLoggedIn } from './auth';
+
+const GuestOnlyRoute = ({ children }) =>
+  isLoggedIn() ? <Navigate to="/feed" replace /> : children;
+
+const ProtectedRoute = ({ children }) =>
+  isLoggedIn() ? children : <Navigate to="/login" replace />;
+
+const Feed = () => <div className="p-4">Feed</div>;
+const Page = ({ title }) => <div className="p-4">{title}</div>;
 
 function App() {
   return (
@@ -10,8 +21,15 @@ function App() {
       <BrowserRouter basename="/">
         <Routes>
           <Route path="/" element={<Body />}>
-            <Route path="/login" element={<Login />} />
-            <Route path="/profile" element={<Profile />} />
+            <Route index element={<Navigate to="/feed" replace />} />
+            <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
+            <Route path="/signup" element={<GuestOnlyRoute><Page title="Sign up" /></GuestOnlyRoute>} />
+            <Route path="/resetPassword" element={<GuestOnlyRoute><ResetPassword /></GuestOnlyRoute>} />
+            <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            <Route path="/settings" element={<ProtectedRoute><Page title="Settings" /></ProtectedRoute>} />
+            <Route path="/requests" element={<ProtectedRoute><Page title="Requests" /></ProtectedRoute>} />
+            <Route path="/connections" element={<ProtectedRoute><Page title="Connections" /></ProtectedRoute>} />
           </Route>
         </Routes>
       </BrowserRouter>

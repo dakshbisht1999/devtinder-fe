@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,11 +23,6 @@ const Login = () => {
         validateEmail(email);
     };
 
-    const handleReset = () => {
-        setEmail("");
-        setEmailError("");
-    };
-
     return (
         <>
             {/* <h1>Login Page</h1> */}
@@ -43,7 +39,7 @@ const Login = () => {
                         </h2>
 
                         <form className="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4"
-                            noValidate onSubmit={handleSubmit} onReset={handleReset}>
+                            noValidate onSubmit={handleSubmit}>
                             <fieldset className="fieldset">
                                 <label className="label">Email</label>
                                 <input
@@ -69,7 +65,7 @@ const Login = () => {
                             </label>
 
                             <button className="btn btn-neutral mt-4" type="submit">Login</button>
-                            <button className="btn btn-ghost mt-1" type="reset">Reset</button>
+                            <Link className="btn btn-ghost mt-1" to="/resetPassword">Reset Password</Link>
                         </form>
                     </div>
                 </div>
