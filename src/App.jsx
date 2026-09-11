@@ -5,6 +5,8 @@ import Login from './Login';
 import Profile from './Profile';
 import ResetPassword from './ResetPassword';
 import { isLoggedIn } from './auth';
+import { Provider } from 'react-redux'
+import appStore from './utils/appStore';
 
 const GuestOnlyRoute = ({ children }) =>
   isLoggedIn() ? <Navigate to="/feed" replace /> : children;
@@ -18,21 +20,23 @@ const Page = ({ title }) => <div className="p-4">{title}</div>;
 function App() {
   return (
     <>
-      <BrowserRouter basename="/">
-        <Routes>
-          <Route path="/" element={<Body />}>
-            <Route index element={<Navigate to="/feed" replace />} />
-            <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
-            <Route path="/signup" element={<GuestOnlyRoute><Page title="Sign up" /></GuestOnlyRoute>} />
-            <Route path="/resetPassword" element={<GuestOnlyRoute><ResetPassword /></GuestOnlyRoute>} />
-            <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Page title="Settings" /></ProtectedRoute>} />
-            <Route path="/requests" element={<ProtectedRoute><Page title="Requests" /></ProtectedRoute>} />
-            <Route path="/connections" element={<ProtectedRoute><Page title="Connections" /></ProtectedRoute>} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
+      <Provider store={appStore}>
+        <BrowserRouter basename="/">
+          <Routes>
+            <Route path="/" element={<Body />}>
+              <Route index element={<Navigate to="/feed" replace />} />
+              <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
+              <Route path="/signup" element={<GuestOnlyRoute><Page title="Sign up" /></GuestOnlyRoute>} />
+              <Route path="/resetPassword" element={<GuestOnlyRoute><ResetPassword /></GuestOnlyRoute>} />
+              <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+              <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+              <Route path="/settings" element={<ProtectedRoute><Page title="Settings" /></ProtectedRoute>} />
+              <Route path="/requests" element={<ProtectedRoute><Page title="Requests" /></ProtectedRoute>} />
+              <Route path="/connections" element={<ProtectedRoute><Page title="Connections" /></ProtectedRoute>} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </Provider>
       {/* <h1 class="text-3xl font-bold underline">Hello World</h1> 
 
       <div class="bg-zinc-100">

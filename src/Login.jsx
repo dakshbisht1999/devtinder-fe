@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "./utils/axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "./utils/userSlice";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const Login = () => {
+    const dispatch = useDispatch();
     const [emailId, setEmailId] = useState("aliabhatt1@gmail.com");
     const [emailIdError, setEmailIdError] = useState("");
     const [password, setPassword] = useState("Abcd@1234");
@@ -50,8 +53,10 @@ const Login = () => {
             // console.log(res)
 
             if(res.data.success){
-                localStorage.setItem("isUserLoggedIn",true)
-                localStorage.setItem("loggedInUser",JSON.stringify(res.data.data));
+                // localStorage.setItem("isUserLoggedIn",true)
+                // localStorage.setItem("loggedInUser",JSON.stringify(res.data.data));
+
+                dispatch(addUser(res.data.data))
             }
         } catch (err) {
             console.error(err)
