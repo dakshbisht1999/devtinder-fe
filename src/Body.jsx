@@ -6,6 +6,7 @@ const Body = () => {
         <>
             <NavBar />
             <Outlet />
+            <br /><br /><br />
             <Footer />
         </>
     );
