@@ -36,6 +36,26 @@ const Login = () => {
 
         if (!isEmailValid || !isPasswordValid) return;
 
+        try{
+            // await fetch("/api/login", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ emailId, password }),
+            // });
+
+            const res = await axiosInstance.post(
+                "/auth/login", 
+                { emailId, password }
+            );
+            // console.log(res)
+
+            if(res.data.success){
+                localStorage.setItem("isUserLoggedIn",true)
+                localStorage.setItem("loggedInUser",JSON.stringify(res.data.data));
+            }
+        } catch (err) {
+            console.error(err)
+        }
     };
 
     return (
