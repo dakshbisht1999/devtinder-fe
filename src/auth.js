@@ -1,15 +1,8 @@
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 
-export const isLoggedIn = () => {
-    const user = useSelector((store)=> store.user);
-    console.log(user)
+export const useAuthUser = () => useSelector((store) => store.user.data);
 
-    // document.cookie
-    //     .split(";")
-    //     .map((cookie) => cookie.trim().split("=")[0])
-    //     .includes("token");
+export const useIsLoggedIn = () => Boolean(useAuthUser());
 
-    // localStorage.getItem("isUserLoggedIn")
-
-    return user ? true : false;
-}
+export const useAuthReady = () =>
+    useSelector((store) => store.user.status !== "checking");

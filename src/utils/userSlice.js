@@ -2,7 +2,10 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const userSlice = createSlice({
   name: 'user',
-  initialState: null,
+  initialState: {
+    data: null,
+    status: 'checking',
+  },
   reducers: {
     // increment: (state) => {
     //   // Redux Toolkit allows us to write "mutating" logic in reducers. It
@@ -18,10 +21,12 @@ const userSlice = createSlice({
     //   state.value += action.payload
     // },
     addUser: (state, action) => {
-      return action.payload;
+      state.data = action.payload;
+      state.status = 'authenticated';
     },
-    removeUser: (state, action) => {
-      return null
+    removeUser: (state) => {
+      state.data = null;
+      state.status = 'unauthenticated';
     },
   },
 })

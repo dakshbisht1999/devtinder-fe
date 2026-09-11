@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import axiosInstance from "./utils/axios";
+import axiosInstance from "../utils/axios";
 import { useDispatch } from "react-redux";
-import { addUser } from "./utils/userSlice";
+import { addUser } from "../utils/userSlice";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
