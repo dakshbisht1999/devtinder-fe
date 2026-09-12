@@ -1,9 +1,29 @@
 import { Link } from "react-router-dom";
 import { useIsLoggedIn, useAuthUser } from "../auth";
+import axiosInstance from "../utils/axios";
+import { removeUser } from "../utils/userSlice";
+import { useDispatch } from "react-redux";
 
 const NavBar = () => {
     const loggedIn = useIsLoggedIn();
     const user = useAuthUser();
+
+    const dispatch = useDispatch();
+
+    const handleLogout = async () => {
+      try{
+        const res = await axiosInstance.post("/auth/logout",{});
+        console.log(res.data.success)
+        if(res.data.success){
+          console.log("hi")
+          dispatch(removeUser(res.data))
+          console.log(res.data.message)
+        }
+        
+      } catch (err) {
+
+      }
+    }
 
     return (
       // <div>NavBar</div>
@@ -34,7 +54,7 @@ const NavBar = () => {
                     </Link>
                   </li>
                   <li><Link to="/settings">Settings</Link></li>
-                  <li><a>Logout</a></li>
+                  <li><button onClick={handleLogout}>Logout</button></li>
                 </ul>
               </div>
             </>
