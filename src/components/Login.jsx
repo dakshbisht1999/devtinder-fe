@@ -12,6 +12,7 @@ const Login = () => {
     const [emailIdError, setEmailIdError] = useState("");
     const [password, setPassword] = useState("Abcd@1234");
     const [passwordError, setPasswordError] = useState("");
+    const [submitError, setSubmitError] = useState("");
 
     const validateEmail = (value) => {
         const error = !value.trim()
@@ -39,6 +40,8 @@ const Login = () => {
 
         if (!isEmailValid || !isPasswordValid) return;
 
+        setSubmitError("");
+
         try{
             // await fetch("/api/login", {
             //     method: "POST",
@@ -59,7 +62,13 @@ const Login = () => {
                 dispatch(addUser(res.data.data))
             }
         } catch (err) {
-            console.error(err)
+            // console.log(err.response)
+            if (err.response?.status === 401) {
+                // console.log("hi")
+                setSubmitError(err.response.data?.message || "Invalid email or password.");
+            } else {
+                setSubmitError(err.response?.data?.message || "Something went wrong. Please try again.");
+            }
         }
     };
 
@@ -90,6 +99,7 @@ const Login = () => {
                                     onChange={(event) => {
                                         const value = event.target.value;
                                         setEmailId(value);
+                                        if (submitError) setSubmitError("");
                                         if (emailIdError) validateEmail(value);
                                     }}
                                     onBlur={(event) => validateEmail(event.target.value)}
@@ -98,7 +108,7 @@ const Login = () => {
                                 {emailIdError && <p className="validator-hint">{emailIdError}</p>}
                             </fieldset>
 
-                            <label className="fieldset">
+                            <label className="fieldset mb-3">
                                 <span className="label">Password</span>
                                 <input 
                                     type="password" 
@@ -108,6 +118,7 @@ const Login = () => {
                                     onChange={(event) => {
                                         const value = event.target.value;
                                         setPassword(value);
+                                        if (submitError) setSubmitError("");
                                         if (passwordError) validatePassword(value);
                                     }}
                                     onBlur={(event) => validatePassword(event.target.value)}
@@ -115,8 +126,12 @@ const Login = () => {
                                 />
                                 {passwordError && <span className="validator-hint">{passwordError}</span>}
                             </label>
-
-                            <button className="btn btn-primary mt-4" type="submit">Login</button>
+                            {submitError && (
+                                <div className="alert alert-error mt-1" role="alert">
+                                    <span>{submitError}</span>
+                                </div>
+                            )}
+                            <button className="btn btn-primary mt-1" type="submit">Login</button>
                             <Link className="btn btn-soft btn-warning mt-1" to="/resetPassword">Reset Password</Link>
                         </form>
                     </div>

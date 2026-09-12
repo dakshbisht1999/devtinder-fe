@@ -36,7 +36,13 @@ const AuthBootstrap = ({ children }) => {
     }, [dispatch]);
 
     if (!isAuthReady) {
-        return <span className="loading loading-spinner loading-xl"></span>;
+        return (
+            <>
+                <div className="flex justify-center items-center min-h-screen w-full">
+                    <span className="loading loading-spinner loading-xl"></span>
+                </div>
+            </>
+        );
     }
 
     return children;
