@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import axiosInstance from "../utils/axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
+import { handleApiError } from "../utils/errorHandler";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -62,13 +63,8 @@ const Login = () => {
                 dispatch(addUser(res.data.data))
             }
         } catch (err) {
-            // console.log(err.response)
-            if (err.response?.status === 401) {
-                // console.log("hi")
-                setSubmitError(err.response.data?.message || "Invalid email or password.");
-            } else {
-                setSubmitError(err.response?.data?.message || "Something went wrong. Please try again.");
-            }
+            // Login errors belong beside the form, so do not also show a toast.
+            setSubmitError(handleApiError(err, { notify: false }));
         }
     };
 

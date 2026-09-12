@@ -3,6 +3,7 @@ import { useIsLoggedIn, useAuthUser } from "../auth";
 import axiosInstance from "../utils/axios";
 import { removeUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
+import { handleApiError } from "../utils/errorHandler";
 
 const NavBar = () => {
     const loggedIn = useIsLoggedIn();
@@ -12,16 +13,16 @@ const NavBar = () => {
 
     const handleLogout = async () => {
       try{
-        const res = await axiosInstance.post("/auth/logout",{});
-        console.log(res.data.success)
+        const res = await axiosInstance.post("/auth/logou",{});
+        // console.log(res.data.success)
         if(res.data.success){
-          console.log("hi")
+          // console.log("hi")
           dispatch(removeUser(res.data))
-          console.log(res.data.message)
+          // console.log(res.data.message)
         }
         
       } catch (err) {
-
+        handleApiError(err);
       }
     }
 

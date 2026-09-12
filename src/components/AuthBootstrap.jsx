@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useAuthReady } from "../auth";
 import axiosInstance from "../utils/axios";
 import { addUser, removeUser } from "../utils/userSlice";
+import { handleApiError } from "../utils/errorHandler";
 
 const AuthBootstrap = ({ children }) => {
     const dispatch = useDispatch();
@@ -16,14 +17,18 @@ const AuthBootstrap = ({ children }) => {
                 // The browser sends the token cookie with this request. This
                 // also works when the cookie is HttpOnly and therefore cannot
                 // be read through document.cookie.
-                const response = await axiosInstance.get("/profile/view");
+                const response = await axiosInstance.get("/profile/view", {
+                    skipGlobalAuthErrorHandling: true,
+                });
 
                 if (isActive && response.data.success) {
                     dispatch(addUser(response.data.data));
                 } else if (isActive) {
                     dispatch(removeUser());
                 }
-            } catch {
+            } catch (error) {
+                // No toast here: an unauthenticated visitor is expected on first load.
+                handleApiError(error, { notify: false });
                 if (isActive) dispatch(removeUser());
             }
         };

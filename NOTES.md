@@ -36,3 +36,6 @@ Body
     Route=/login  => Login
     Route=/connetions => Connections
     Router=/profile => Profile
+
+
+Need to do error handling in component, globally, and using toastr

@@ -9,6 +9,8 @@ import AuthBootstrap from './components/AuthBootstrap';
 import { useIsLoggedIn } from './auth';
 import { Provider } from 'react-redux'
 import appStore from './utils/appStore';
+import { ToastContainer } from 'react-toastify';
+import { useEffect, useState } from 'react';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -23,11 +25,24 @@ const ProtectedRoute = ({ children }) => {
 const Page = ({ title }) => <div className="p-4">{title}</div>;
 
 function App() {
+  const [isDarkMode, setIsDarkMode] = useState(
+    window.matchMedia('(prefers-color-scheme: dark)').matches
+  );
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handler = (e) => setIsDarkMode(e.matches);
+    
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
+  }, []);
+  
   return (
     <>
       <Provider store={appStore}>
         <AuthBootstrap>
           <BrowserRouter basename="/">
+            <ToastContainer position="top-right" autoClose={3000} theme={isDarkMode ? 'dark' : 'light'} />
             <Routes>
               <Route path="/" element={<Body />}>
                 <Route index element={<Navigate to="/feed" replace />} />
