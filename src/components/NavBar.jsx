@@ -5,6 +5,7 @@ import { removeUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
+import { clearAuthenticatedSession } from "../utils/authSession";
 
 const NavBar = () => {
     const loggedIn = useIsLoggedIn();
@@ -16,6 +17,7 @@ const NavBar = () => {
       try{
         const res = await axiosInstance.post("/auth/logout",{});
         if(res.data.success){
+          clearAuthenticatedSession();
           dispatch(removeUser());
           toast.success(res.data.message || "Logged out successfully.");
         }

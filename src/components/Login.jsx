@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
+import { markAuthenticatedSession } from "../utils/authSession";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -69,6 +70,7 @@ const Login = () => {
                 // localStorage.setItem("isUserLoggedIn",true)
                 // localStorage.setItem("loggedInUser",JSON.stringify(res.data.data));
 
+                markAuthenticatedSession();
                 dispatch(addUser(res.data.data));
                 toast.success(`${getGreeting()}, ${res.data.data?.firstName || "welcome back"}!`);
             }

@@ -40,9 +40,9 @@ function App() {
   return (
     <>
       <Provider store={appStore}>
+        <ToastContainer position="top-right" autoClose={3000} theme={isDarkMode ? 'dark' : 'light'} />
         <AuthBootstrap>
           <BrowserRouter basename="/">
-            <ToastContainer position="top-right" autoClose={3000} theme={isDarkMode ? 'dark' : 'light'} />
             <Routes>
               <Route path="/" element={<Body />}>
                 <Route index element={<Navigate to="/feed" replace />} />

@@ -3,7 +3,13 @@ import { useDispatch } from "react-redux";
 import { useAuthReady } from "../auth";
 import axiosInstance from "../utils/axios";
 import { addUser, removeUser } from "../utils/userSlice";
-import { handleApiError } from "../utils/errorHandler";
+import { handleApiError, isTokenExpiredError } from "../utils/errorHandler";
+import { hasAuthenticatedSession, markAuthenticatedSession } from "../utils/authSession";
+
+const hasCookie = (name) =>
+    document.cookie
+        .split("; ")
+        .some((cookie) => cookie.startsWith(`${name}=`));
 
 const AuthBootstrap = ({ children }) => {
     const dispatch = useDispatch();
@@ -11,6 +17,10 @@ const AuthBootstrap = ({ children }) => {
 
     useEffect(() => {
         let isActive = true;
+        // Read this before the profile request. If a token was sent but the
+        // server rejects it, it is an expired/invalid session—not a new visitor.
+        const hadTokenCookie = hasCookie("token");
+        const hadAuthenticatedSession = hasAuthenticatedSession();
 
         const restoreSession = async () => {
             try {
@@ -22,13 +32,22 @@ const AuthBootstrap = ({ children }) => {
                 });
 
                 if (isActive && response.data.success) {
+                    markAuthenticatedSession();
                     dispatch(addUser(response.data.data));
                 } else if (isActive) {
                     dispatch(removeUser());
                 }
             } catch (error) {
-                // No toast here: an unauthenticated visitor is expected on first load.
-                handleApiError(error, { notify: false });
+                if (!isActive) return;
+
+                const isUnauthorized = error.response?.status === 401;
+
+                // A missing cookie is expected for a visitor opening the login
+                // page. A present token—or TOKEN_EXPIRED from the API—rejected
+                // with 401 is an expired session.
+                handleApiError(error, {
+                    notify: !isUnauthorized || hadTokenCookie || hadAuthenticatedSession || isTokenExpiredError(error),
+                });
                 if (isActive) dispatch(removeUser());
             }
         };
