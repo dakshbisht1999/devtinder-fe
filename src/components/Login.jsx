@@ -4,8 +4,17 @@ import axiosInstance from "../utils/axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { handleApiError } from "../utils/errorHandler";
+import { toast } from "react-toastify";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const getGreeting = () => {
+    const hour = new Date().getHours();
+
+    if (hour < 12) return "Good morning";
+    if (hour < 17) return "Good afternoon";
+    return "Good evening";
+};
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -60,7 +69,8 @@ const Login = () => {
                 // localStorage.setItem("isUserLoggedIn",true)
                 // localStorage.setItem("loggedInUser",JSON.stringify(res.data.data));
 
-                dispatch(addUser(res.data.data))
+                dispatch(addUser(res.data.data));
+                toast.success(`${getGreeting()}, ${res.data.data?.firstName || "welcome back"}!`);
             }
         } catch (err) {
             // Login errors belong beside the form, so do not also show a toast.

@@ -4,6 +4,7 @@ import axiosInstance from "../utils/axios";
 import { removeUser } from "../utils/userSlice";
 import { useDispatch } from "react-redux";
 import { handleApiError } from "../utils/errorHandler";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
     const loggedIn = useIsLoggedIn();
@@ -13,12 +14,10 @@ const NavBar = () => {
 
     const handleLogout = async () => {
       try{
-        const res = await axiosInstance.post("/auth/logou",{});
-        // console.log(res.data.success)
+        const res = await axiosInstance.post("/auth/logout",{});
         if(res.data.success){
-          // console.log("hi")
-          dispatch(removeUser(res.data))
-          // console.log(res.data.message)
+          dispatch(removeUser());
+          toast.success(res.data.message || "Logged out successfully.");
         }
         
       } catch (err) {
