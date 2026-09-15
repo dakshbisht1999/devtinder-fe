@@ -11,6 +11,7 @@ import { Provider } from 'react-redux'
 import appStore from './utils/appStore';
 import { ToastContainer } from 'react-toastify';
 import { useEffect, useState } from 'react';
+import Signup from './components/Signup';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -47,7 +48,7 @@ function App() {
               <Route path="/" element={<Body />}>
                 <Route index element={<Navigate to="/feed" replace />} />
                 <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
-                <Route path="/signup" element={<GuestOnlyRoute><Page title="Sign up" /></GuestOnlyRoute>} />
+                <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
                 <Route path="/resetPassword" element={<GuestOnlyRoute><ResetPassword /></GuestOnlyRoute>} />
                 <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

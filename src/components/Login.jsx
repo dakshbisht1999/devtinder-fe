@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import axiosInstance from "../utils/axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
@@ -19,9 +19,10 @@ const getGreeting = () => {
 
 const Login = () => {
     const dispatch = useDispatch();
-    const [emailId, setEmailId] = useState("aliabhatt1@gmail.com");
+    const location = useLocation();
+    const [emailId, setEmailId] = useState(location.state?.emailId || "");
     const [emailIdError, setEmailIdError] = useState("");
-    const [password, setPassword] = useState("Abcd@1234");
+    const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [submitError, setSubmitError] = useState("");
 
