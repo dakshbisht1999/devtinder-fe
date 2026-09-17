@@ -5,7 +5,7 @@ import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
-const UserCard = ({ users }) => {
+const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
     const dispatch = useDispatch();
     const [pendingUserId, setPendingUserId] = useState(null);
     const [swipeDirection, setSwipeDirection] = useState(null);
@@ -78,6 +78,24 @@ const UserCard = ({ users }) => {
                         </div>
                     );
                 })}
+                {users.length === 0 && hasMore && (
+                    <div className="card border border-base-content/20 bg-base-300 shadow-sm">
+                        <div className="card-body items-center text-center">
+                            <h2 className="card-title">Want to meet more developers?</h2>
+                            <p>Load the next set of profiles.</p>
+                            <div className="card-actions mt-2">
+                                <button
+                                    className="btn btn-primary min-w-32"
+                                    disabled={isLoadingMore}
+                                    onClick={onLoadMore}>
+                                    {isLoadingMore
+                                        ? <span className="loading loading-spinner loading-sm"></span>
+                                        : "Load more"}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
