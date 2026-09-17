@@ -10,13 +10,12 @@ const Feed = () => {
 
     const feed = useSelector((store) => store.feed);
     const dispatch = useDispatch();
-    const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(false);
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
     const hasRequestedInitialFeed = useRef(false);
 
-    const getFeed = useCallback(async (page, shouldAppend = false) => {
+    const getFeed = useCallback(async (shouldAppend = false) => {
         if (shouldAppend) {
             setIsLoadingMore(true);
         } else {
@@ -25,12 +24,14 @@ const Feed = () => {
 
         try {
             const res = await axiosInstance.get("/user/feed", {
-                params: { limit: 10, page },
+                // Swiped profiles are removed from the server's feed. Always
+                // start at the first remaining profile so `skip` never skips
+                // an unseen profile after the total count changes.
+                params: { limit: 10, page: 1 },
             });
 
             if (res.data.success) {
                 dispatch(shouldAppend ? appendFeed(res.data.data) : addFeed(res.data.data));
-                setCurrentPage(res.data.pagination?.currentPage ?? page);
                 setHasMore(res.data.pagination?.hasMore === true);
             }
         } catch (err) {
@@ -49,12 +50,12 @@ const Feed = () => {
         if (hasRequestedInitialFeed.current) return;
 
         hasRequestedInitialFeed.current = true;
-        getFeed(1);
+        getFeed();
     }, [getFeed]);
 
     const handleLoadMore = () => {
         if (!hasMore || isLoadingMore) return;
-        getFeed(currentPage, true);
+        getFeed(true);
     };
 
     if (isInitialLoading) {
