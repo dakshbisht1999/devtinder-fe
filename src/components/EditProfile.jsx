@@ -7,6 +7,7 @@ import UserCard from "./UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import ageCalc from "../utils/ageCalc";
 import { addUser } from "../utils/userSlice";
+import DeleteSettings from "./DeleteProfile";
 
 const EditProfile = () => {
     const user = useSelector((store) => store.user.data);
@@ -27,6 +28,19 @@ const EditProfile = () => {
     const [submitError, setSubmitError] = useState("");
     const allowedGender = ["male","female","others"];
     const [skills, setSkills] = useState(user.skills);
+    const deleteProfileModalConfig = {
+        trigger: {
+            type: "text",
+            color: "error",
+            text: "Click here!"
+        },
+        modal:{
+            title: "Confirm Deletion",
+            body: "Are you absolutely sure you want to delete your profile?",
+            btn1: "Cancel",
+            btn2: "Yes, Delete"
+        }
+    }
     
 
     const validateName = (value, name) => {
@@ -358,11 +372,14 @@ const EditProfile = () => {
                                 </div>
                             )}
                             <button className="btn btn-primary mt-1" type="submit">Save Changes</button>
-                            <br />
-                            <p className="text-center">Want to change your password? <Link className="mt-1 text-primary" to="/resetPassword">Click here!</Link></p>
-                            <div className="divider">OR</div>
-                            <p className="text-center">Want to delete your profile? <Link className="mt-1 text-primary" to="/resetPassword">Click here!</Link></p>
                         </form>
+                        <br />
+                        <p className="text-center">Want to change your password? <Link className="mt-1 text-primary" to="/resetPassword">Click here!</Link></p>
+                        <div className="divider">OR</div>
+                        <div className="text-center">Want to delete your profile? 
+                            {/* <Link className="mt-1 text-primary" to="/profileSettings">Click here!</Link> */}
+                            <DeleteSettings modalConfig={deleteProfileModalConfig} />
+                        </div>
                     </div>
                 </div>
             </div>
