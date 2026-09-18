@@ -5,6 +5,7 @@ import axiosInstance from "../utils/axios";
 import { addUser, removeUser } from "../utils/userSlice";
 import { handleApiError, isTokenExpiredError } from "../utils/errorHandler";
 import { hasAuthenticatedSession, markAuthenticatedSession } from "../utils/authSession";
+import Loader from "./Loader";
 
 const hasCookie = (name) =>
     document.cookie
@@ -62,9 +63,7 @@ const AuthBootstrap = ({ children }) => {
     if (!isAuthReady) {
         return (
             <>
-                <div className="flex justify-center items-center min-h-screen w-full">
-                    <span className="loading loading-spinner loading-xl"></span>
-                </div>
+                <Loader />
             </>
         );
     }

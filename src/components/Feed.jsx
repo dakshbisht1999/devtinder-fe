@@ -3,7 +3,8 @@ import axiosInstance from "../utils/axios";
 import { addFeed, appendFeed } from "../utils/feedSlice";
 import { handleApiError } from "../utils/errorHandler";
 import { useCallback, useEffect, useRef, useState } from "react";
-import UserCard from "./UserCard";
+import SwipeUserCard from "./SwipeUserCard";
+import Loader from "./Loader";
 
 const Feed = () => {
 
@@ -60,9 +61,7 @@ const Feed = () => {
 
     if (isInitialLoading) {
         return (
-            <div className="flex justify-center items-center min-h-[60vh] w-full">
-                <span className="loading loading-spinner loading-xl"></span>
-            </div>
+            <Loader />
         );
     }
 
@@ -71,7 +70,7 @@ const Feed = () => {
     }
 
     return (
-        <UserCard
+        <SwipeUserCard
             users={feed}
             hasMore={hasMore}
             isLoadingMore={isLoadingMore}

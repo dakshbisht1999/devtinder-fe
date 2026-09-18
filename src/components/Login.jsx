@@ -20,9 +20,9 @@ const getGreeting = () => {
 const Login = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const [emailId, setEmailId] = useState(location.state?.emailId || "");
+    const [emailId, setEmailId] = useState(location.state?.emailId || "aliabhatt1@gmail.com");
     const [emailIdError, setEmailIdError] = useState("");
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState("Abcd@1234");
     const [passwordError, setPasswordError] = useState("");
     const [submitError, setSubmitError] = useState("");
 
@@ -141,7 +141,7 @@ const Login = () => {
                                 </div>
                             )}
                             <button className="btn btn-primary mt-1" type="submit">Login</button>
-                            <Link className="btn btn-soft btn-warning mt-1" to="/resetPassword">Reset Password</Link>
+                            <Link className="btn btn-soft btn-warning mt-1" to="/resetPasswordOtp">Reset Password</Link>
                             <br />
                                 <div className="flex justify-center items-center">
                                     <hr className="w-full" />

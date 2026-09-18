@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
+import ageCalc from "../utils/ageCalc";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{9,}$/;
@@ -86,17 +87,7 @@ const Signup = () => {
         if (!value) {
             error = "Required";
         } else {
-            // Calculate the age based on the DOB
-            const today = new Date();
-            const birthDate = new Date(value);
-            
-            let age = today.getFullYear() - birthDate.getFullYear();
-            const monthDifference = today.getMonth() - birthDate.getMonth();
-
-            // Adjust the age if the birthday hasn't occurred yet this year
-            if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
-            }
+            let age = ageCalc(value);
 
             // Validate against Mongoose schema constraints
             if (age < 18) {

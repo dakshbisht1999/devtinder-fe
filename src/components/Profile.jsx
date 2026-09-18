@@ -1,7 +1,9 @@
+import EditProfile from "./EditProfile"
+
 const Profile = () => {
     return (
         <>
-            Profile Page
+            <EditProfile />
         </>
     )
 }
