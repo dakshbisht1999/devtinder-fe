@@ -20,7 +20,7 @@ const getGreeting = () => {
 const Login = () => {
     const dispatch = useDispatch();
     const location = useLocation();
-    const [emailId, setEmailId] = useState(location.state?.emailId || "aliabhatt1@gmail.com");
+    const [emailId, setEmailId] = useState(location.state?.emailId || "dishasingh1@gmail.com");
     const [emailIdError, setEmailIdError] = useState("");
     const [password, setPassword] = useState("Abcd@1234");
     const [passwordError, setPasswordError] = useState("");
