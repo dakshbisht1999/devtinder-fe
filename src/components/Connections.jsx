@@ -31,7 +31,7 @@ const Connections = () => {
                 // Swiped profiles are removed from the server's feed. Always
                 // start at the first remaining profile so `skip` never skips
                 // an unseen profile after the total count changes.
-                params: { limit: 3, page },
+                params: { limit: 10, page },
             });
 
             if (res.data.success) {
@@ -59,7 +59,7 @@ const Connections = () => {
     }, [getConnections]);
 
     const handleLoadMore = () => {
-        console.log(currentPage)
+        // console.log(currentPage)
         if (!hasMore || isLoadingMore) return;
         getConnections(currentPage + 1, true);
     };
