@@ -12,6 +12,7 @@ import appStore from './utils/appStore';
 import { ToastContainer } from 'react-toastify';
 import { useEffect, useState } from 'react';
 import Signup from './components/Signup';
+import Connections from './components/Connections';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -54,7 +55,7 @@ function App() {
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
                 <Route path="/requests" element={<ProtectedRoute><Page title="Requests" /></ProtectedRoute>} />
-                <Route path="/connections" element={<ProtectedRoute><Page title="Connections" /></ProtectedRoute>} />
+                <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
               </Route>
             </Routes>
           </BrowserRouter>

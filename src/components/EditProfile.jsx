@@ -7,7 +7,7 @@ import UserCard from "./UserCard";
 import { useDispatch, useSelector } from "react-redux";
 import ageCalc from "../utils/ageCalc";
 import { addUser } from "../utils/userSlice";
-import DeleteSettings from "./DeleteProfile";
+import DeleteProfile from "./DeleteProfile";
 
 const EditProfile = () => {
     const user = useSelector((store) => store.user.data);
@@ -41,6 +41,23 @@ const EditProfile = () => {
             btn2: "Yes, Delete"
         }
     }
+    const demoFunction = (value) => {
+        console.log(value)
+    }
+    const cardBtnsConfig = [
+        {
+            color:"primary",
+            text:"Ignore",
+            fn: demoFunction,
+            disabled: false
+        },
+        {
+            color:"secondary",
+            text:"Interested",
+            fn: demoFunction,
+            disabled: false
+        }
+    ]
     
 
     const validateName = (value, name) => {
@@ -378,7 +395,7 @@ const EditProfile = () => {
                         <div className="divider">OR</div>
                         <div className="text-center">Want to delete your profile? 
                             {/* <Link className="mt-1 text-primary" to="/profileSettings">Click here!</Link> */}
-                            <DeleteSettings modalConfig={deleteProfileModalConfig} />
+                            <DeleteProfile modalConfig={deleteProfileModalConfig} />
                         </div>
                     </div>
                 </div>
@@ -392,6 +409,7 @@ const EditProfile = () => {
                     hasMore={false}
                     isLoadingMore={false}
                     onLoadMore={null}
+                    btnsArr={cardBtnsConfig}
                 />
             </div>
         </div>
