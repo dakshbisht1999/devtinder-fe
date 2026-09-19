@@ -141,7 +141,7 @@ const Login = () => {
                                 </div>
                             )}
                             <button className="btn btn-primary mt-1" type="submit">Login</button>
-                            <Link className="btn btn-soft btn-warning mt-1" to="/resetPasswordOtp">Reset Password</Link>
+                            {/* <Link className="btn btn-soft btn-warning mt-1" to="/resetPasswordOtp">Reset Password</Link> */}
                             <br />
                                 <div className="flex justify-center items-center">
                                     <hr className="w-full" />
