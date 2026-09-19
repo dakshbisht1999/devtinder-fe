@@ -69,6 +69,48 @@ Need to do error handling in component, globally, and using toastr
         - Copy code from dist(build files) to /var/www/html/
         - sudo scp -r dist/* /var/www/html/
         - Enable port :80 on your instance (by adding security -> inbound rule as custom tcp with port 80 and 0.0.0.0)
+    - Backend
+        - allowed ec2 instance public IP on mongodb server
+        - npm intsall pm2 -g
+        - pm2 start npm --name "dt-be" -- start
+        - pm2 list, pm2 stop <name>, pm2 delete <name>
+        - pm2 logs, pm2 flush
+        - config nginx proxy pass - sudo nano /etc/nginx/sites-available/default (for proper routing/differentiate between app routes and api routes)
+        - restart nginx - sudo systemctl restart nginx
+
+
+
+# Ngxinx config: 
+
+    #Frontend = http://13.54.230.74/
+    #Backend = http://13.54.230.74:7777/
+
+    server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        root /var/www/html;
+        index index.html index.htm;
+
+        server_name _;
+
+        # React Front-end Routing
+        location / {
+            try_files $uri $uri/ /index.html;
+        }
+
+        # Node.js Back-end API Proxy
+        location /api/ {
+            proxy_pass http://localhost:7777;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'keep-alive';
+            proxy_set_header Host $host;
+            proxy_cache_bypass $http_upgrade;
+        }
+    }
+
+
 
 
     
