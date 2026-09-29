@@ -1,5 +1,7 @@
 import axios from 'axios';
 import { handleApiError, isLoginRequest } from './errorHandler';
+import appStore from './appStore';
+import { setEmailServiceNotice } from './emailServiceNoticeSlice';
 
 // Vite will automatically inject the correct URL here
 const baseURL = import.meta.env.VITE_BASE_URL || "/api/v1";
@@ -11,7 +13,15 @@ const axiosInstance = axios.create({
 });
 
 axiosInstance.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        const emailServiceNotice = response.data?.emailServiceNotice;
+
+        if (typeof emailServiceNotice === "string" && emailServiceNotice.trim()) {
+            appStore.dispatch(setEmailServiceNotice(emailServiceNotice));
+        }
+
+        return response;
+    },
     (error) => {
         // A 401 from login means bad credentials, not an expired session.
         // AuthBootstrap opts out because a missing session on first load is normal.

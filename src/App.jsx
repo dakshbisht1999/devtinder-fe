@@ -14,6 +14,8 @@ import { useEffect, useState } from 'react';
 import Signup from './components/Signup';
 import Connections from './components/Connections';
 import Requests from './components/Requests';
+import ResetPasswordViaOtp from './components/ResetPasswordViaOtp';
+import EmailServiceNotice from './components/EmailServiceNotice';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -24,8 +26,6 @@ const ProtectedRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
   return isLoggedIn ? children : <Navigate to="/login" replace />;
 };
-
-const Page = ({ title }) => <div className="p-4">{title}</div>;
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(
@@ -44,6 +44,7 @@ function App() {
     <>
       <Provider store={appStore}>
         <ToastContainer position="top-right" autoClose={3000} theme={isDarkMode ? 'dark' : 'light'} />
+        <EmailServiceNotice />
         <AuthBootstrap>
           <BrowserRouter basename="/">
             <Routes>
@@ -51,7 +52,7 @@ function App() {
                 <Route index element={<Navigate to="/feed" replace />} />
                 <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
                 <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
-                <Route path="/resetPasswordOtp" element={<GuestOnlyRoute><Page title="Reset Password using OTP"  /></GuestOnlyRoute>} />
+                <Route path="/resetPasswordOtp" element={<GuestOnlyRoute><ResetPasswordViaOtp  /></GuestOnlyRoute>} />
                 <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
