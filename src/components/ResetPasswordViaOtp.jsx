@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setEmailServiceNotice } from "../utils/emailServiceNoticeSlice";
+import { removeUser } from "../utils/userSlice";
+import { clearAuthenticatedSession } from "../utils/authSession";
 
 const passwordPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{9,}$/;
 const emailPattern = /^\S+@\S+\.\S+$/;
 
 const ResetPasswordViaOtp = () => {
     const navigate = useNavigate();
+    const user = useSelector((store) => store.user.data);
+
     const [password, setPassword] = useState("");
     const [passwordError, setPasswordError] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -136,8 +140,13 @@ const ResetPasswordViaOtp = () => {
             // console.log(res)
 
             if(res.data.success){
-                toast.success(`${res.data?.message || "Password changed successfully."}`);
-                navigate("/");
+                toast.success(`${res.data?.message || "Password changed successfully. Please log in again."}`);
+                // The backend invalidates existing sessions by incrementing
+                // tokenVersion. Clear the now-stale local session before
+                // entering the guest-only login route.
+                clearAuthenticatedSession();
+                dispatch(removeUser());
+                navigate("/login", { replace: true });
             }
         } catch (err) {
             // Signup errors belong beside the form, so do not also show a toast.
@@ -163,13 +172,13 @@ const ResetPasswordViaOtp = () => {
                     </figure> */}
                     <div className="card-body">
                         <h2 className="card-title flex justify-center">
-                            Reset Password
+                            {user && user.authProvider == "google" && !user.hasPassword ? "Set Password":"Reset Password"}
                         </h2>
 
                         {!otpVerified && <form className="fieldset w-xs p-4"
                             onSubmit={verifyOTP}>
                             <fieldset className="fieldset">
-                                <label className="label">Email</label>
+                                <label className="label">Email *</label>
                                 <div className="join">
                                     <div>
                                         <label className="input validator join-item">
@@ -214,7 +223,7 @@ const ResetPasswordViaOtp = () => {
                             </fieldset>
 
                             {otpSent && <fieldset className="fieldset">
-                                <label className="label">OTP (6 digits)</label>
+                                <label className="label">OTP (6 digits) *</label>
                                 <label className="otp">
                                     <span></span>
                                     <span></span>
@@ -253,7 +262,7 @@ const ResetPasswordViaOtp = () => {
                         {otpVerified && <form className="fieldset w-xs p-4"
                             onSubmit={handleSubmit}>
                             <fieldset className="fieldset">
-                                <label className="label">New Password</label>
+                                <label className="label">New Password *</label>
                                 <input 
                                     type="password" 
                                     className="input validator" 
@@ -272,7 +281,7 @@ const ResetPasswordViaOtp = () => {
                             </fieldset>
 
                             <fieldset className="fieldset">
-                                <label className="label">Confirm New Password</label>
+                                <label className="label">Confirm New Password *</label>
                                 <input 
                                     type="text" 
                                     className="input validator" 
@@ -296,7 +305,9 @@ const ResetPasswordViaOtp = () => {
                                     <span>{submitError}</span>
                                 </div>
                             )}
-                            <button className="btn btn-primary mt-1" type="submit">Change Password</button>
+                            <button className="btn btn-primary mt-1" type="submit">
+                                {user && user.authProvider == "google" && !user.hasPassword ? "Set Password":"Reset Password"}
+                            </button>
                         </form>}
                     </div>
                 </div>

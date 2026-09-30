@@ -551,7 +551,7 @@ const EditProfile = () => {
                             <button className="btn btn-primary mt-1" type="submit">Save Changes</button>
                         </form>
                         <br />
-                        <p className="text-center">Want to change your password? <Link className="mt-1 text-primary" to="/resetPassword">Click here!</Link></p>
+                        <p className="text-center">Want to {user.authProvider=="google" && !user.hasPassword ? "set" : "change"} your password? <Link className="mt-1 text-primary" to={user.authProvider=="google" && !user.hasPassword?"/resetPasswordOtp" : "/resetPassword"}>Click here!</Link></p>
                         <div className="divider">OR</div>
                         <div className="text-center">Want to delete your profile? 
                             {/* <Link className="mt-1 text-primary" to="/profileSettings">Click here!</Link> */}

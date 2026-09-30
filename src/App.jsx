@@ -52,7 +52,7 @@ function App() {
                 <Route index element={<Navigate to="/feed" replace />} />
                 <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
                 <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
-                <Route path="/resetPasswordOtp" element={<GuestOnlyRoute><ResetPasswordViaOtp  /></GuestOnlyRoute>} />
+                <Route path="/resetPasswordOtp" element={<ResetPasswordViaOtp  />} />
                 <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
                 <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
                 <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
