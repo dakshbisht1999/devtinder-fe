@@ -8,7 +8,7 @@ const Terms = () => {
         <p className="text-sm text-base-content mb-6">Effective Date: October 1, 2026</p>
 
         <p className="text-base-content mb-6 leading-relaxed">
-          By accessing or using <strong className="text-white">DevTinder</strong>, you agree to be bound by these Terms of Service. If you do not agree, please refrain from using the app.
+          By accessing or using <strong>DevTinder</strong>, you agree to be bound by these Terms of Service. If you do not agree, please refrain from using the app.
         </p>
 
         <section className="mb-6">

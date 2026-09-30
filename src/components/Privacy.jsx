@@ -8,7 +8,7 @@ const PrivacyPolicy = () => {
         <p className="text-sm text-base-content mb-6">Effective Date: October 1, 2026</p>
 
         <p className="text-base-content mb-6 leading-relaxed">
-          Welcome to <strong className="text-white">DevTinder</strong>. We respect your privacy and are committed to protecting the personal data you share with us.
+          Welcome to <strong>DevTinder</strong>. We respect your privacy and are committed to protecting the personal data you share with us.
         </p>
 
         <section className="mb-6">
