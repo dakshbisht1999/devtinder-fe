@@ -41,7 +41,7 @@ const GoogleLoginBtn = () => {
   };
 
   return (
-    <div style={{ marginTop: '20px' }}>
+    <div style={{ marginTop: '10px' }} className="flex items-center justify-center">
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={handleError}
