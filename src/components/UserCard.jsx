@@ -1,6 +1,6 @@
 import Loader from "./Loader";
 
-const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore, btnsArr }) => {
+const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore, btnsArr = [] }) => {
     // hasMore = true;
     return (
         <div className="flex flex-col justify-center">

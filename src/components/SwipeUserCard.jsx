@@ -1,17 +1,25 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import Loader from "./Loader";
+import EmailVerificationRequiredModal from "./EmailVerificationRequiredModal";
 
 const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
     const dispatch = useDispatch();
+    const isEmailVerified = useSelector((store) => store.user.data?.isEmailVerified);
     const [pendingUserId, setPendingUserId] = useState(null);
     const [swipeDirection, setSwipeDirection] = useState(null);
+    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
 
     const handleRequest = async (status, userId) => {
+        if (!isEmailVerified) {
+            setIsVerificationModalOpen(true);
+            return;
+        }
+
         setPendingUserId(userId);
 
         try {
@@ -98,6 +106,10 @@ const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
                     </div>
                 )}
             </div>
+            <EmailVerificationRequiredModal
+                isOpen={isVerificationModalOpen}
+                onClose={() => setIsVerificationModalOpen(false)}
+            />
         </div>
     );
 };

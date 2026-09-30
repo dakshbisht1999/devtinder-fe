@@ -6,15 +6,18 @@ import UserCard from "./UserCard";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { addRequests, appendRequests } from "../utils/requestsSlice";
+import EmailVerificationRequiredModal from "./EmailVerificationRequiredModal";
 
 const Requests = () => {
 
     const requests = useSelector((store)=>store.requests);
+    const isEmailVerified = useSelector((store) => store.user.data?.isEmailVerified);
     const dispatch = useDispatch();
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(false);
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
+    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
     const hasRequestedInitialConnections = useRef(false);
 
     const getRequests = useCallback(async (page, shouldAppend = false) => {
@@ -105,6 +108,11 @@ const Requests = () => {
     ];
 
     const handleRequest = async (reqStatus, reqId) => {
+        if (!isEmailVerified) {
+            setIsVerificationModalOpen(true);
+            return;
+        }
+
         try{
             const res = await axiosInstance.post(`/request/review/${reqStatus}/${reqId}`);
             if(res.data.success){
@@ -126,6 +134,10 @@ const Requests = () => {
                 btnsArr={cardBtnsConfig}
             >
             </UserCard>
+            <EmailVerificationRequiredModal
+                isOpen={isVerificationModalOpen}
+                onClose={() => setIsVerificationModalOpen(false)}
+            />
         </>
     )
 }

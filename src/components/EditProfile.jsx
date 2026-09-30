@@ -28,6 +28,74 @@ const EditProfile = () => {
     const [submitError, setSubmitError] = useState("");
     const allowedGender = ["male","female","others"];
     const [skills, setSkills] = useState(user.skills);
+
+    const [otp, setOtp] = useState("");
+    const [otpSent, setOtpSent] = useState(false);
+    const [isSendingOtp, setIsSendingOtp] = useState(false);
+    const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
+    const [otpVerified, setOtpVerified] = useState(user.isEmailVerified);
+
+    const sendOtpFn = async () => {
+        if(otpVerified) return;
+
+        setSubmitError("");
+        setIsSendingOtp(true);
+
+        try {
+            const res = await axiosInstance.post("/auth/email-verification");
+
+            if (res.data.success) {
+                setOtp("");
+                setOtpSent(true);
+                toast.success(res.data.message || "OTP sent successfully.");
+            } else {
+                setSubmitError(res.data.message || "Unable to send OTP. Please try again.");
+            }
+        } catch (err) {
+            setSubmitError(handleApiError(err, { notify: false }));
+        } finally {
+            setIsSendingOtp(false);
+        }
+    };
+
+    const verifyOtpFn = async (event) => {
+        event.preventDefault();
+
+        if (!otpSent) {
+            setSubmitError("Send an OTP before verifying it.");
+            return;
+        }
+
+        if (!/^\d{6}$/.test(otp)) {
+            setSubmitError("Enter the six-digit OTP.");
+            return;
+        }
+
+        setSubmitError("");
+        setIsVerifyingOtp(true);
+
+        try {
+            const res = await axiosInstance.post(
+                "/auth/email-verification/verify",
+                { otp }
+            );
+
+            if (res.data.success) {
+                toast.success(res.data.message || "Email verified successfully")
+                setOtpVerified(true);
+                dispatch(addUser({ ...user, isEmailVerified:true }));
+
+            } else {
+                setSubmitError(res.data.message || "Unable to verify OTP. Please try again.");
+            }
+        } catch (err) {
+            // setSubmitError(handleApiError(err, { notify: false }));
+            handleApiError(err);
+        } finally {
+            setIsVerifyingOtp(false);
+        }
+    };
+
     const deleteProfileModalConfig = {
         trigger: {
             type: "text",
@@ -275,15 +343,80 @@ const EditProfile = () => {
                             </fieldset>
 
                             <fieldset className="fieldset">
-                                <label className="label">Email</label>
-                                <input
+                                <label className="label">Email 
+                                    {otpVerified ? <span className="text-success">(Verified)</span>
+                                    :<span className="text-warning">(Need to verify)</span>}
+                                </label>
+                                {otpVerified && <input
                                     type="email"
-                                    className="input bg-base-300 cursor-not-allowed disabled"
+                                    className="input input-success bg-base-300 cursor-not-allowed disabled"
                                     placeholder="Email"
                                     value={emailId}
                                     readOnly
-                                />
+                                />}
+                                {!otpVerified && <div className="join w-full">
+                                    <div className="w-full">
+                                        <label className="input input-warning join-item bg-base-300 cursor-not-allowed disabled">
+                                            {/* <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                <g
+                                                strokeLinejoin="round"
+                                                strokeLinecap="round"
+                                                strokeWidth="2.5"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                >
+                                                    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                                    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                                                </g>
+                                            </svg> */}
+                                            <input
+                                                type="email"
+                                                placeholder="Email"
+                                                value={emailId}
+                                                className="cursor-not-allowed"
+                                                readOnly
+                                            />
+                                        </label>
+                                    </div>
+                                    <button
+                                        className="btn btn-warning join-item"
+                                        type="button"
+                                        disabled={isSendingOtp || otpSent}
+                                        onClick={sendOtpFn}>
+                                        {isSendingOtp ? <span className="loading loading-spinner loading-sm"></span>
+                                            : !otpSent ? "Verify" : "OTP Sent"}
+                                    </button>
+                                </div>}
                             </fieldset>
+
+                            {otpSent && !otpVerified && <fieldset className="fieldset">
+                                <label className="label">OTP (6 digits)</label>
+                                <label className="otp">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <input type="text" autoComplete="one-time-code"
+                                        inputMode="numeric" maxLength="6"
+                                        pattern="[0-9]{6}" required disabled={!otpSent}
+                                        value={otp}
+                                        onChange={(event) => {
+                                            setOtp(event.target.value.replace(/\D/g, ""));
+                                            if (submitError) setSubmitError("");
+                                        }}
+                                    />
+                                </label>
+                                {otpSent && <button
+                                    className="btn btn-info mt-1 w-fit"
+                                    type="button" onClick={verifyOtpFn}
+                                    disabled={!otpSent || otp.length<6 || isVerifyingOtp}>
+                                    {isVerifyingOtp
+                                        ? <span className="loading loading-spinner loading-sm"></span>
+                                        : "Verify OTP"}
+                                </button>}
+                            </fieldset>}
 
                             <fieldset className="fieldset">
                                 <label className="label">Age</label>
