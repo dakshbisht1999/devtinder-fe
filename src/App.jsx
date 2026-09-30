@@ -16,6 +16,8 @@ import Connections from './components/Connections';
 import Requests from './components/Requests';
 import ResetPasswordViaOtp from './components/ResetPasswordViaOtp';
 import EmailServiceNotice from './components/EmailServiceNotice';
+import Terms from './components/Terms';
+import Privacy from './components/Privacy';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -58,6 +60,9 @@ function App() {
                 <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
                 <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
                 <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
+
+                <Route path="/terms" element={<Terms />} />
+                <Route path="/privacy" element={<Privacy />} />
               </Route>
             </Routes>
           </BrowserRouter>
