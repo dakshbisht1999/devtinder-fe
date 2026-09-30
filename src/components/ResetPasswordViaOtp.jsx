@@ -99,6 +99,7 @@ const ResetPasswordViaOtp = () => {
 
             if (res.data.success) {
                 setOtpVerified(true);
+                toast.success(`${res.data?.message || "OTP verified. You may now set a new password"}`);
             } else {
                 setSubmitError(res.data.message || "Unable to verify OTP. Please try again.");
             }

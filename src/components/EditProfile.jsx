@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ageCalc from "../utils/ageCalc";
 import { addUser } from "../utils/userSlice";
 import DeleteProfile from "./DeleteProfile";
+import { setEmailServiceNotice } from "../utils/emailServiceNoticeSlice";
 
 const EditProfile = () => {
     const user = useSelector((store) => store.user.data);
@@ -18,6 +19,7 @@ const EditProfile = () => {
     const [lastNameError, setLastNameError] = useState("");
     const [emailId] = useState(user.emailId);
     const [age, setAge] = useState(user.age);
+    const [ageError, setAgeError] = useState("");
     const [dob, setDob] = useState(user.dob);
     const [dobError, setDobError] = useState("");
     const [gender, setGender] = useState(user.gender);
@@ -33,10 +35,11 @@ const EditProfile = () => {
     const [otpSent, setOtpSent] = useState(false);
     const [isSendingOtp, setIsSendingOtp] = useState(false);
     const [isVerifyingOtp, setIsVerifyingOtp] = useState(false);
-    const [otpVerified, setOtpVerified] = useState(user.isEmailVerified);
+    const [emailVerified, setEmailVerified] = useState(user.isEmailVerified);
+    const [profileComplete, setProfileComplete] = useState(user.isProfileComplete);
 
     const sendOtpFn = async () => {
-        if(otpVerified) return;
+        if(emailVerified) return;
 
         setSubmitError("");
         setIsSendingOtp(true);
@@ -82,7 +85,7 @@ const EditProfile = () => {
 
             if (res.data.success) {
                 toast.success(res.data.message || "Email verified successfully")
-                setOtpVerified(true);
+                setEmailVerified(true);
                 dispatch(addUser({ ...user, isEmailVerified:true }));
 
             } else {
@@ -165,10 +168,17 @@ const EditProfile = () => {
                 error = "Age cannot exceed 100 years.";
             }else{
                 setAge(age);
+                validateAge();
             }
         }
 
         setDobError(error);
+        return !error;
+    }
+
+    const validateAge = () => {
+        const error = !age ? "Required (Please fill DOB to calculate your age)" : ""
+        setAgeError(error)
         return !error;
     }
 
@@ -218,10 +228,10 @@ const EditProfile = () => {
         const isFirstNameValid = validateName(firstName, "firstName")
         const isLastNameValid = validateName(lastName, "lastName")
         const isDobValid = validateDob(dob);
+        const isAgeValid = validateAge(age);
         const isPhotoUrlValid = validatePhotoUrl(photoUrl);
         const isAboutValid = validateAbout(about);
-
-        if (!isFirstNameValid || !isLastNameValid || !isDobValid || !isPhotoUrlValid || !isAboutValid) return;
+        if (!isFirstNameValid || !isLastNameValid || !isDobValid || !isAgeValid || !isPhotoUrlValid || !isAboutValid) return;
         // Send only actual changes. In particular, an empty or invalid optional
         // value must not overwrite the currently saved gender or skills.
         const updateData = {};
@@ -274,6 +284,14 @@ const EditProfile = () => {
         }
     };
 
+    useEffect(() => {
+        if(!emailVerified){
+            dispatch(setEmailServiceNotice(
+                "Email delivery is currently running in AWS SES sandbox mode. Messages can only be delivered to SES-verified email addresses."
+            ));
+        }
+    }, [dispatch]);
+
     // The preview intentionally uses the draft form values, not the saved
     // Redux user, so it reflects edits before the profile is submitted.
     const reviewUser = {
@@ -305,7 +323,7 @@ const EditProfile = () => {
                         <form className="fieldset w-xs p-4"
                             onSubmit={handleSubmit}>
                             <fieldset className="fieldset">
-                                <label className="label">First Name</label>
+                                <label className="label">First Name *</label>
                                 <input
                                     type="text"
                                     className="input validator"
@@ -324,7 +342,7 @@ const EditProfile = () => {
                             </fieldset>
 
                             <fieldset className="fieldset">
-                                <label className="label">Last Name</label>
+                                <label className="label">Last Name *</label>
                                 <input
                                     type="text"
                                     className="input validator"
@@ -343,18 +361,18 @@ const EditProfile = () => {
                             </fieldset>
 
                             <fieldset className="fieldset">
-                                <label className="label">Email 
-                                    {otpVerified ? <span className="text-success">(Verified)</span>
+                                <label className="label">Email * 
+                                    {emailVerified ? <span className="text-success">(Verified)</span>
                                     :<span className="text-warning">(Need to verify)</span>}
                                 </label>
-                                {otpVerified && <input
+                                {emailVerified && <input
                                     type="email"
                                     className="input input-success bg-base-300 cursor-not-allowed disabled"
                                     placeholder="Email"
                                     value={emailId}
                                     readOnly
                                 />}
-                                {!otpVerified && <div className="join w-full">
+                                {!emailVerified && <div className="join w-full">
                                     <div className="w-full">
                                         <label className="input input-warning join-item bg-base-300 cursor-not-allowed disabled">
                                             {/* <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -389,7 +407,7 @@ const EditProfile = () => {
                                 </div>}
                             </fieldset>
 
-                            {otpSent && !otpVerified && <fieldset className="fieldset">
+                            {otpSent && !emailVerified && <fieldset className="fieldset">
                                 <label className="label">OTP (6 digits)</label>
                                 <label className="otp">
                                     <span></span>
@@ -419,18 +437,27 @@ const EditProfile = () => {
                             </fieldset>}
 
                             <fieldset className="fieldset">
-                                <label className="label">Age</label>
+                                <label className="label">Age *</label>
                                 <input
                                     type="number"
-                                    className="input bg-base-300 cursor-not-allowed disabled"
+                                    className="input validator bg-base-300 cursor-not-allowed disabled"
                                     placeholder="Age"
                                     value={age}
+                                    onBlur={(event)=>{
+                                      validateAge()  
+                                    }}
+                                    onChange={(event)=>{
+                                        if(submitError) setSubmitError("");
+                                        if(ageError) validateAge();
+                                    }}
+                                    aria-invalid={Boolean(ageError)}
                                     readOnly
                                 />
+                                {ageError && <p className="validator-hint my-0">{ageError}</p>}
                             </fieldset>
 
                             <fieldset className="fieldset">
-                                <label className="label">Date Of Birth</label>
+                                <label className="label">Date Of Birth *</label>
                                 <input 
                                     type="date" 
                                     className="input validator" 

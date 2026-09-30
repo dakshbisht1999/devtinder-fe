@@ -4,7 +4,7 @@ import appStore from './appStore';
 import { setEmailServiceNotice } from './emailServiceNoticeSlice';
 
 // Vite will automatically inject the correct URL here
-const baseURL = import.meta.env.VITE_BASE_URL || "/api/v1";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 // Ek global 'instance' banaya hai, jisme saari default settings hai
 const axiosInstance = axios.create({

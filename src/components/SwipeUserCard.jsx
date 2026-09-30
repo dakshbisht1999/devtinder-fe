@@ -5,18 +5,26 @@ import axiosInstance from "../utils/axios";
 import { handleApiError } from "../utils/errorHandler";
 import { removeUserFromFeed } from "../utils/feedSlice";
 import Loader from "./Loader";
-import EmailVerificationRequiredModal from "./EmailVerificationRequiredModal";
+import RequiredModal from "./RequiredModal";
 
 const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
     const dispatch = useDispatch();
     const isEmailVerified = useSelector((store) => store.user.data?.isEmailVerified);
+    const isProfileComplete = useSelector((store) => store.user.data?.isProfileComplete);
     const [pendingUserId, setPendingUserId] = useState(null);
     const [swipeDirection, setSwipeDirection] = useState(null);
-    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [modalName, setModalName] = useState("");
 
     const handleRequest = async (status, userId) => {
         if (!isEmailVerified) {
-            setIsVerificationModalOpen(true);
+            setIsModalOpen(true);
+            return;
+        }
+
+        if (!isProfileComplete) {
+            setModalName("completeProfile")
+            setIsModalOpen(true);
             return;
         }
 
@@ -106,9 +114,10 @@ const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
                     </div>
                 )}
             </div>
-            <EmailVerificationRequiredModal
-                isOpen={isVerificationModalOpen}
-                onClose={() => setIsVerificationModalOpen(false)}
+            <RequiredModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                modalName={modalName}
             />
         </div>
     );

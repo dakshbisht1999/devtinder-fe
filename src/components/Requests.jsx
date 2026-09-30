@@ -6,18 +6,20 @@ import UserCard from "./UserCard";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
 import { addRequests, appendRequests } from "../utils/requestsSlice";
-import EmailVerificationRequiredModal from "./EmailVerificationRequiredModal";
+import RequiredModal from "./RequiredModal";
 
 const Requests = () => {
 
     const requests = useSelector((store)=>store.requests);
     const isEmailVerified = useSelector((store) => store.user.data?.isEmailVerified);
+    const isProfileComplete = useSelector((store) => store.user.data?.isProfileComplete);
     const dispatch = useDispatch();
     const [currentPage, setCurrentPage] = useState(0);
     const [hasMore, setHasMore] = useState(false);
     const [isInitialLoading, setIsInitialLoading] = useState(true);
     const [isLoadingMore, setIsLoadingMore] = useState(false);
-    const [isVerificationModalOpen, setIsVerificationModalOpen] = useState(false);
+    const [modalName, setModalName] = useState("");
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const hasRequestedInitialConnections = useRef(false);
 
     const getRequests = useCallback(async (page, shouldAppend = false) => {
@@ -109,7 +111,14 @@ const Requests = () => {
 
     const handleRequest = async (reqStatus, reqId) => {
         if (!isEmailVerified) {
-            setIsVerificationModalOpen(true);
+            setModalName("verifyEmail")
+            setIsModalOpen(true);
+            return;
+        }
+
+        if (!isProfileComplete) {
+            setModalName("completeProfile")
+            setIsModalOpen(true);
             return;
         }
 
@@ -134,9 +143,10 @@ const Requests = () => {
                 btnsArr={cardBtnsConfig}
             >
             </UserCard>
-            <EmailVerificationRequiredModal
-                isOpen={isVerificationModalOpen}
-                onClose={() => setIsVerificationModalOpen(false)}
+            <RequiredModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                modalName={modalName}
             />
         </>
     )

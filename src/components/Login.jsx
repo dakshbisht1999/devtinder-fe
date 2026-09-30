@@ -6,16 +6,10 @@ import { addUser } from "../utils/userSlice";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
 import { markAuthenticatedSession } from "../utils/authSession";
+import GoogleLoginBtn from "./GoogleLoginBtn";
+import getGreeting from "../utils/getGreeting";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-const getGreeting = () => {
-    const hour = new Date().getHours();
-
-    if (hour < 12) return "Good morning";
-    if (hour < 17) return "Good afternoon";
-    return "Good evening";
-};
 
 const Login = () => {
     const dispatch = useDispatch();
@@ -150,6 +144,7 @@ const Login = () => {
                                 </div>
                             <br />
                             <Link className="btn btn-soft btn-secondary mt-1" to="/signup">Sign Up</Link>
+                            <GoogleLoginBtn></GoogleLoginBtn>
                         </form>
                     </div>
                 </div>
