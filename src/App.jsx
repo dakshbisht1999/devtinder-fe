@@ -18,6 +18,7 @@ import ResetPasswordViaOtp from './components/ResetPasswordViaOtp';
 import EmailServiceNotice from './components/EmailServiceNotice';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
+import LandingPage from './components/LandingPage';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -51,7 +52,7 @@ function App() {
           <BrowserRouter basename="/">
             <Routes>
               <Route path="/" element={<Body />}>
-                <Route index element={<Navigate to="/feed" replace />} />
+                <Route index element={<LandingPage />} />
                 <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
                 <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
                 <Route path="/resetPasswordOtp" element={<ResetPasswordViaOtp  />} />

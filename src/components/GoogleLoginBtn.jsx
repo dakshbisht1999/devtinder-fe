@@ -8,9 +8,11 @@ import { toast } from 'react-toastify';
 import getGreeting from '../utils/getGreeting';
 import { handleApiError } from '../utils/errorHandler';
 import { addUser } from '../utils/userSlice';
+import { useNavigate } from 'react-router-dom';
 
 const GoogleLoginBtn = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSuccess = async (credentialResponse) => {
     // credentialResponse.credential contains the Google ID Token (JWT)
@@ -23,10 +25,11 @@ const GoogleLoginBtn = () => {
       );
       
       if (res.data.success) {
-        console.log('Login successful:', res.data.data);
+        // console.log('Login successful:', res.data.data);
         markAuthenticatedSession();
         dispatch(addUser(res.data.data));
         toast.success(`${getGreeting()}, ${res.data.data?.firstName || "welcome back"}!`);
+        navigate("/feed")
       } else {
         console.error('Login failed:', res.data.message);
       }
@@ -41,7 +44,7 @@ const GoogleLoginBtn = () => {
   };
 
   return (
-    <div style={{ marginTop: '10px' }} className="flex items-center justify-center">
+    <div className="flex items-center justify-center">
       <GoogleLogin
         onSuccess={handleSuccess}
         onError={handleError}

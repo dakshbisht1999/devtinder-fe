@@ -144,7 +144,9 @@ const Login = () => {
                                 </div>
                             <br />
                             <Link className="btn btn-soft btn-secondary mt-1" to="/signup">Sign Up</Link>
-                            <GoogleLoginBtn></GoogleLoginBtn>
+                            <div style={{ marginTop: '10px' }}>
+                                <GoogleLoginBtn></GoogleLoginBtn>
+                            </div>
                         </form>
                     </div>
                 </div>

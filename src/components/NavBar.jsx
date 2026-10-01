@@ -6,6 +6,8 @@ import { useDispatch } from "react-redux";
 import { handleApiError } from "../utils/errorHandler";
 import { toast } from "react-toastify";
 import { clearAuthenticatedSession } from "../utils/authSession";
+import GoogleLoginBtn from "./GoogleLoginBtn";
+import Breadcrumb from "./Breadcrumb";
 
 const NavBar = () => {
     const loggedIn = useIsLoggedIn();
@@ -28,41 +30,46 @@ const NavBar = () => {
     }
 
     return (
-      // <div>NavBar</div>
-      <div className="navbar bg-base-300 shadow-sm">
-        <div className="flex-1">
-          <Link to={loggedIn ? "/feed" : "/login"} className="btn btn-ghost text-xl">💻 DevTinder</Link>
-        </div>
-        <div className="flex gap-2 items-center">
-          {/* <input type="text" placeholder="Search" className="input w-24 md:w-auto" /> */}
-          {loggedIn && (
-            <>
-              <p>Welcome, {user.firstName}</p>
-              <div className="dropdown dropdown-end mx-5">
-                <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
-                  <div className="w-10 rounded-full">
-                    <img
-                      alt="Tailwind CSS Navbar component"
-                      src={user.photoUrl} />
+      <>
+        <div className="navbar bg-base-300 shadow-sm">
+          <div className="flex-1">
+            <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-primary">💻 DevTinder</Link>
+            {/* <a href="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-primary">
+              💻 DevTinder
+            </a> */}
+          </div>
+          <div className="flex gap-2 items-center">
+            {/* <input type="text" placeholder="Search" className="input w-24 md:w-auto" /> */}
+            {loggedIn ? (
+              <>
+                <p>Welcome, {user.firstName}</p>
+                <div className="dropdown dropdown-end mx-5">
+                  <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+                    <div className="w-10 rounded-full">
+                      <img
+                        alt="Tailwind CSS Navbar component"
+                        src={user.photoUrl} />
+                    </div>
                   </div>
+                  <ul
+                    tabIndex={-1}
+                    className="menu menu-sm dropdown-content bg-primary text-primary-content rounded-box z-9 mt-3 w-52 p-2 shadow">
+                    <li>
+                      <Link to="/profile" className="justify-between">
+                        Profile
+                      </Link>
+                    </li>
+                    <li><Link to="/requests">Requests <span className="badge">New</span></Link></li>
+                    <li><Link to="/connections">Connections</Link></li>
+                    <li><button onClick={handleLogout}>Logout</button></li>
+                  </ul>
                 </div>
-                <ul
-                  tabIndex={-1}
-                  className="menu menu-sm dropdown-content bg-primary text-primary-content rounded-box z-9 mt-3 w-52 p-2 shadow">
-                  <li>
-                    <Link to="/profile" className="justify-between">
-                      Profile
-                    </Link>
-                  </li>
-                  <li><Link to="/requests">Requests <span className="badge">New</span></Link></li>
-                  <li><Link to="/connections">Connections</Link></li>
-                  <li><button onClick={handleLogout}>Logout</button></li>
-                </ul>
-              </div>
-            </>
-          )}
+              </>
+            ) : (<GoogleLoginBtn />)}
+          </div>
         </div>
-      </div>
+        <Breadcrumb />
+      </>
     );
 };
 export default NavBar;
