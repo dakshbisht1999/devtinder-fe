@@ -2,6 +2,7 @@ import React from 'react';
 import GoogleLoginBtn from './GoogleLoginBtn';
 import { Link } from 'react-router-dom';
 import { useIsLoggedIn } from '../auth';
+import devTinderLogo from "./../assets/devtinder-logo-120x120.jpg";
 
 const LandingPage = ({ onGoogleLogin }) => {
     const loggedIn = useIsLoggedIn();
@@ -15,7 +16,7 @@ const LandingPage = ({ onGoogleLogin }) => {
             <h1 className="flex flex-col items-center text-4xl sm:text-5xl font-extrabold tracking-tight">
                 Connect & Match with <span className="text-primary">Developers</span>at
                 <span className="my-4" >
-                    <img src="src/assets/devtinder-logo-120x120.jpg" alt="devtinder-logo-square" />
+                    <img src={devTinderLogo} alt="devtinder-logo-square" className='rounded' />
                 </span>
             </h1>
             <p className="text-lg text-base-content/80 mb-8 leading-relaxed">
