@@ -107,11 +107,11 @@ const NavBar = () => {
           <div className="drawer-side">
             <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
             {/* 4. Attach closeDrawer to your navigation ul */}
-            <ul className="menu bg-primary min-h-full w-80 p-4" onClick={closeDrawer}>
+            <ul className="menu bg-primary text-primary-content min-h-full w-80 p-4" onClick={closeDrawer}>
               {/* Sidebar content here */}
               {loggedIn ? (
                 <>
-                  <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-base">💻 DevTinder</Link>
+                  <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-white">💻 DevTinder</Link>
                   <li className="mt-5">
                     <a>
                       <div className="btn btn-ghost btn-circle avatar">
@@ -132,7 +132,7 @@ const NavBar = () => {
                 </>
               ):(
                 <>
-                  <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-base">💻 DevTinder</Link>
+                  <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-white">💻 DevTinder</Link>
                   <Link to="/login" className="btn btn-base mt-10 mb-4">Login</Link>
                   <a><GoogleLoginBtn /></a>
                 </>
