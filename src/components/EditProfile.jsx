@@ -246,7 +246,11 @@ const EditProfile = () => {
 
         if (dob !== user.dob) {
             updateData.dob = dob;
-            updateData.age = ageCalc(dob);
+            updateData.age = age;
+            if(!profileComplete){
+                setProfileComplete(true)
+                updateData.isProfileComplete = true
+            }
         }
 
         if (allowedGender.includes(gender) && gender !== user.gender) {
