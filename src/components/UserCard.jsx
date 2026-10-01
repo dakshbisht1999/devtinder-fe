@@ -3,7 +3,7 @@ import Loader from "./Loader";
 const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore, btnsArr = [] }) => {
     // hasMore = true;
     return (
-        <div className="flex flex-col justify-center">
+        <div className="flex flex-col justify-center mt-6">
             {users.map((user)=>{
                 return (
                     <div className="flex justify-center py-5" key={user._id}>

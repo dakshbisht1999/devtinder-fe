@@ -50,7 +50,7 @@ const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
     };
 
     return (
-        <div className="flex justify-center p-6 flex-1 w-full">
+        <div className="flex justify-center p-6 flex-1 w-full mt-6">
             <div className="stack stack-bottom w-96 max-w-full">
                 {users.slice(0, 3).map((user, index) => {
                     const isPending = pendingUserId === user._id;

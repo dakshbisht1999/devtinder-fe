@@ -21,7 +21,7 @@ const Footer = () => {
             </footer> */}
 
             {/* Footer */}
-            <footer className="footer sm:footer-horizontal bg-base-300 text-base-content p-4 fixed bottom-0">
+            <footer className="footer sm:footer-horizontal bg-base-300 text-base-content border-t border-base-400 p-4 fixed bottom-0 z-9">
                 <aside className="flex flex-col sm:flex-row w-full justify-between items-center">
                     <p>© {new Date().getFullYear()} DevTinder. All rights reserved.</p>
                     <div className="flex gap-4 p-2">
