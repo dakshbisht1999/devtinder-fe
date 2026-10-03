@@ -297,7 +297,45 @@ git push origin main
 
 ---
 
+## 🔮 Future Roadmap & Engineering Discussion
+
+The following capabilities represent active design initiatives and planned extensions, structured to highlight full-stack frontend architecture and scalability patterns during technical discussions:
+
+### 1. 🤖 AI Assistant & Semantic Candidate Search (RAG Architecture)
+- **Interactive Streaming Chatbot UI:** Build a persistent/dockable conversational copilot allowing developers to ask natural language queries (e.g., *"Find me a full-stack engineer experienced in React and WebSockets for an open-source project"*).
+- **Client-side Streaming Integration:** Consume Server-Sent Events (SSE) / `fetch` with `ReadableStream` to stream LLM responses chunk-by-chunk with zero UI blocking.
+- **Rich Output Formatting:** Integrated markdown rendering, syntax-highlighted code blocks, and dynamic interactive developer preview cards embedded directly within chat responses.
+
+### 2. 💬 Live 1-on-1 Chat with Premium Access Gate (WebSockets)
+- **Real-Time Messaging Client:** Socket.IO / WebSocket client integration featuring bidirectional communication, live typing indicators, delivered/read indicators, and user presence detection (online/offline).
+- **Resilient Connection State:** Connection retry mechanisms with exponential backoff and optimistic message dispatch with failure rollbacks.
+- **Premium Subscription Paywall:** Role-based UI gating where direct real-time chat is unlocked exclusively for paid subscribers, displaying a custom upgrade modal for free-tier users.
+
+### 3. 💳 Razorpay Payment Gateway Integration
+- **Subscription Tiers & Checkout Flow:** Interactive pricing table highlighting features for Free vs. Pro Developer plans.
+- **Razorpay Checkout SDK Integration:** Client-side invocation using `razorpay-js`, capturing payment tokens securely without handling sensitive card credentials directly on the client.
+- **Instant State Upgrades:** Synchronous Redux store updates on payment confirmation toast, unlocking premium perks without page reloads.
+
+### 4. 📱 Progressive Web App (PWA) & Mobile Packaging
+- **PWA Experience:** Service worker implementation with Workbox for runtime caching (`NetworkFirst` for API data, `CacheFirst` for static assets), offline fallback screens, and custom "Install App" banner.
+- **Cross-Platform Mobile Builds:** Packaging the Vite/React application using **Capacitor** to deploy native-quality iOS and Android binaries sharing 100% of the web codebase.
+
+### 5. 🔔 Push Notifications
+- **Web Push API Integration:** Permission prompt modal and Service Worker registration using `PushManager.subscribe()` with public VAPID keys.
+- **Real-Time Notification Handling:** Background notification display for incoming connection requests and new messages when the browser tab is closed or minimized.
+
+### 6. 🐳 Containerization & Cloud Native Architecture (Docker)
+- **Multi-Stage Dockerfile:** Containerizing the frontend build with a Node.js 22 alpine build stage and a hardened, unprivileged Nginx alpine runtime stage, producing an ultra-lightweight image (<25MB).
+- **Cloud-Native Deployment (HLD):** Prepared for orchestration via Kubernetes manifests (Deployment, ClusterIP, Ingress) with horizontal autoscaling (HPA) and CDN edge distribution (Cloudflare / AWS CloudFront).
+
+### 7. ⏰ In-App Notification Center & Digest Preferences
+- **Digest Center:** UI component to configure reminder preferences (daily email digests vs. instant notifications).
+- **Badge Indicators:** Real-time badge counters in the navigation bar reflecting pending unreviewed connection requests.
+
+---
+
 ## 🔗 Related Repositories
 
 - **Backend Repository (`devtinder-be`):** Node.js, Express, MongoDB, AWS SES, and PM2 process management.
 - For complete backend architecture and deployment notes, refer to [devtinder-be](https://github.com/dakshbisht1999/devtinder-be/blob/main/README.md).
+
