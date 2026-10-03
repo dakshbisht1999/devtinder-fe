@@ -336,6 +336,22 @@ The following capabilities represent active design initiatives and planned exten
 
 ## 🔗 Related Repositories
 
-- **Backend Repository (`devtinder-be`):** Node.js, Express, MongoDB, AWS SES, and PM2 process management.
-- For complete backend architecture and deployment notes, refer to [devtinder-be](https://github.com/dakshbisht1999/devtinder-be/blob/main/README.md).
+| Repository | Description |
+|---|---|
+| 🖥️ [devtinder-fe](https://github.com/dakshbisht1999/devtinder-fe) | Frontend Single Page Application (React 19, Vite, Tailwind CSS v4, Redux Toolkit) |
+| ⚙️ [devtinder-be](https://github.com/dakshbisht1999/devtinder-be) | Backend REST API Service (Node.js, Express, MongoDB Atlas, AWS SES, PM2) |
+| 🌐 [Live Platform](https://devtinder.dishantbisht.in) | Production deployment hosted on AWS EC2 with custom domain and SSL |
 
+---
+
+## 👨‍💻 Author
+
+**Dishant Bisht**
+- GitHub: [@dakshbisht1999](https://github.com/dakshbisht1999)
+- Portfolio / Domain: [dishantbisht.in](https://dishantbisht.in)
+
+---
+
+## 📄 License
+
+This project is licensed under the [ISC License](LICENSE).
