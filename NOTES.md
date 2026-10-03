@@ -51,7 +51,7 @@ Need to do error handling in component, globally, and using toastr
 
 
 
-    # Deployment
+# Deployment
 
     - Signup on AWS 
     - Launch instance
@@ -80,10 +80,19 @@ Need to do error handling in component, globally, and using toastr
 
 
 
-# Ngxinx config: 
+# Handle CORS
+    - Set allowed origins in BE
 
-    #Frontend = http://13.54.230.74/
-    #Backend = http://13.54.230.74:7777/
+
+
+# Nginx config: 
+
+    - sudo nano /etc/nginx/sites-available/default (to edit nginx configuration file)
+    - sudo nginx -t (to check syntax error in config file)
+    - sudo systemctl reload nginx (to reload the nginx)
+
+    #Frontend = http://54.252.117.220/
+    #Backend = http://54.252.117.220:7777/
 
     server {
         listen 80 default_server;
@@ -92,7 +101,7 @@ Need to do error handling in component, globally, and using toastr
         root /var/www/html;
         index index.html index.htm;
 
-        server_name _;
+        server_name devtinder.dishantbisht.in;
 
         # React Front-end Routing
         location / {
@@ -112,5 +121,68 @@ Need to do error handling in component, globally, and using toastr
 
 
 
+# Adding a custom Domain name
 
+    - purchased domain name from godaddy
+    - signup on cloudflare & add a new domain name
+    - change the nameservers on godaddy and point it to cloudflare
+    - wait for sometime till your nameservers are updated ~15 minutes
+    - DNS record: A devtinder.dishantbisht.in 54.252.117.220 [every record should be DNS Only as SSL is maintained by certbot]
+
+
+
+# Enable SSL for website
+    # Install Certbot and the Nginx plugin (to install SSL Certificate)
+        - sudo apt update
+        - sudo apt install certbot python3-certbot-nginx -y
+
+    # Obtain the SSL certificate and auto-configure Nginx
+        - sudo certbot --nginx -d devtinder.dishantbisht.in
+
+
+
+# Sending Emails via SES
+
+    - Create a IAM user
+    - Give Access to AmazonSESFullAccess / AdministratorAccess
+    - Amazon SES: Create an Identity
+    - Verify your domain name
+    - Verify an email address identity
+    - Install AWS SDK - v3 
+    - Code Example https://github.com/awsdocs/aws-doc-sdk-examples/tree/main/javascriptv3/example_code/ses#code-examples
+    - Setup SesClient
+    - Access Credentials should be created in IAm under SecurityCredentials Tab
+    - Add the credentials to the env file
+    - Write code for SESClient
+    - Write code for Sending email address
+    - Make the email dynamic by passing more params to the run function
+
+
+
+# Install pm2 (advanced production process manager for Node.js)
+    - npm install pm2@latest -g
+    - pm2 start npm --name "dt-be" -- run start
+    - pm2 list
+    - pm2 logs
+    - pm2 restart dt-be (pm2 restart all -i max)
+    - pm2 flush dt-be
+    - pm2 stop dt-be
+    - pm2 delete dt-be
+    - pm2 status
+
+
+
+# CI/CD Deployment using GitHub Actions
     
+    - Create .github/workflows directories in root
+    - Then create deploy-fe.yml and deploy-be.yml
+    - Set Secrets variables (like VITE_BASE_URL, VITE_GOOGLE_CLIENT_ID, EC2_HOST, EC2_USERNAME, EC2_SSH_KEY) in github repo settings
+
+
+
+
+// For dishantbisht.in
+# Deployment using S3 
+
+    - Create a S3 Bucket
+    I have purchased my own domain dishantbisht.in (its cname is my s3 bucket) since its holding my portfolio site.
