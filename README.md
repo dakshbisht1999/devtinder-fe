@@ -164,6 +164,9 @@ VITE_BASE_URL=http://localhost:7777/api/v1
 
 # Google OAuth 2.0 Web Client ID
 VITE_GOOGLE_CLIENT_ID=your-google-client-id.apps.googleusercontent.com
+
+# Google Analytics 4 Measurement ID (optional; e.g. G-XXXXXXXXXX)
+VITE_GA4_MEASUREMENT_ID=G-XXXXXXXXXX
 ```
 
 > [!NOTE]

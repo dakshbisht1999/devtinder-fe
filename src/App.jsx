@@ -19,6 +19,7 @@ import EmailServiceNotice from './components/EmailServiceNotice';
 import Terms from './components/Terms';
 import Privacy from './components/Privacy';
 import LandingPage from './components/LandingPage';
+import GoogleAnalyticsTracker from './components/GoogleAnalyticsTracker';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -50,6 +51,7 @@ function App() {
         <EmailServiceNotice />
         <AuthBootstrap>
           <BrowserRouter basename="/">
+            <GoogleAnalyticsTracker />
             <Routes>
               <Route path="/" element={<Body />}>
                 <Route index element={<LandingPage />} />
