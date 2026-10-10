@@ -6,9 +6,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import UserCard from "./UserCard";
 import Loader from "./Loader";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Connections = () => {
 
+    const navigate = useNavigate();
     const connections = useSelector((store)=>store.connections);
     const dispatch = useDispatch();
     const [currentPage, setCurrentPage] = useState(0);
@@ -91,6 +93,12 @@ const Connections = () => {
     }
 
     const cardBtnsConfig = [
+        {
+            color:"primary",
+            text:"Chat",
+            fn: (connection) => navigate(`/chat/${connection.friendId}`),
+            disabled: false
+        },
         {
             color:"error text-white",
             text:"Remove Connection",

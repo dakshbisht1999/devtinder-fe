@@ -20,6 +20,8 @@ import Terms from './components/Terms';
 import Privacy from './components/Privacy';
 import LandingPage from './components/LandingPage';
 import GoogleAnalyticsTracker from './components/GoogleAnalyticsTracker';
+import { SocketProvider } from './context/SocketContext';
+import ChatPage from './pages/ChatPage';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -52,22 +54,27 @@ function App() {
         <AuthBootstrap>
           <BrowserRouter basename="/">
             <GoogleAnalyticsTracker />
-            <Routes>
-              <Route path="/" element={<Body />}>
-                <Route index element={<LandingPage />} />
-                <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
-                <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
-                <Route path="/resetPasswordOtp" element={<ResetPasswordViaOtp  />} />
-                <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
-                <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-                <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
-                <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
-                <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
+            {/* 🚀 Add SocketProvider right here! */}
+            <SocketProvider>
+              <Routes>
+                <Route path="/" element={<Body />}>
+                  <Route index element={<LandingPage />} />
+                  <Route path="/login" element={<GuestOnlyRoute><Login /></GuestOnlyRoute>} />
+                  <Route path="/signup" element={<GuestOnlyRoute><Signup /></GuestOnlyRoute>} />
+                  <Route path="/resetPasswordOtp" element={<ResetPasswordViaOtp  />} />
+                  <Route path="/feed" element={<ProtectedRoute><Feed /></ProtectedRoute>} />
+                  <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+                  <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
+                  <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
+                  <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
 
-                <Route path="/terms" element={<Terms />} />
-                <Route path="/privacy" element={<Privacy />} />
-              </Route>
-            </Routes>
+                  <Route path="/terms" element={<Terms />} />
+                  <Route path="/privacy" element={<Privacy />} />
+
+                  <Route path="/chat/:receiverId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+                </Route>
+              </Routes>
+            </SocketProvider>
           </BrowserRouter>
         </AuthBootstrap>
       </Provider>
