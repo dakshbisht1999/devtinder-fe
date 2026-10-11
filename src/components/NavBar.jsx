@@ -89,6 +89,7 @@ const NavBar = () => {
                           <li><Link to="/profile">Profile</Link></li>
                           <li><Link to="/requests">Requests <span className="badge">New</span></Link></li>
                           <li><Link to="/connections">Connections</Link></li>
+                          <li><Link to="/messages">Messages</Link></li>
                           <li><button onClick={handleLogout}>Logout</button></li>
                         </ul>
                       </div>
@@ -126,6 +127,7 @@ const NavBar = () => {
                       <li><Link to="/profile">Profile</Link></li>
                       <li><Link to="/requests" className="flex">Requests <span className="badge">New</span></Link></li>
                       <li><Link to="/connections">Connections</Link></li>
+                      <li><Link to="/messages">Messages</Link></li>
                       <li><button onClick={handleLogout}>Logout</button></li>
                     </ul>
                   </li>

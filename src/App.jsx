@@ -22,6 +22,7 @@ import LandingPage from './components/LandingPage';
 import GoogleAnalyticsTracker from './components/GoogleAnalyticsTracker';
 import { SocketProvider } from './context/SocketContext';
 import ChatPage from './pages/ChatPage';
+import MessagesList from './components/MessagesList';
 
 const GuestOnlyRoute = ({ children }) => {
   const isLoggedIn = useIsLoggedIn();
@@ -67,11 +68,12 @@ function App() {
                   <Route path="/resetPassword" element={<ProtectedRoute><ResetPassword /></ProtectedRoute>} />
                   <Route path="/requests" element={<ProtectedRoute><Requests /></ProtectedRoute>} />
                   <Route path="/connections" element={<ProtectedRoute><Connections /></ProtectedRoute>} />
+                  <Route path="/messages" element={<ProtectedRoute><MessagesList /></ProtectedRoute>} />
 
                   <Route path="/terms" element={<Terms />} />
                   <Route path="/privacy" element={<Privacy />} />
 
-                  <Route path="/chat/:receiverId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
+                  <Route path="/messages/:receiverId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
                 </Route>
               </Routes>
             </SocketProvider>

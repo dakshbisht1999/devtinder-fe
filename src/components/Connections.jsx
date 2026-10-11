@@ -96,7 +96,7 @@ const Connections = () => {
         {
             color:"primary",
             text:"Chat",
-            fn: (connection) => navigate(`/chat/${connection.friendId}`),
+            fn: (connection) => navigate(`/messages/${connection.friendId}`),
             disabled: false
         },
         {

@@ -1,8 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import axiosInstance from '../utils/axios';
 
 const Breadcrumb = () => {
   const location = useLocation();
+  const chatReceiverId = location.pathname.match(/^\/messages\/([^/]+)/)?.[1];
+  const [chatReceiver, setChatReceiver] = useState({ id: chatReceiverId, name: '' });
+
+  useEffect(() => {
+    let isActive = true;
+
+    if (chatReceiverId && !location.state?.receiverName) {
+      axiosInstance.get(`/user/profile/${chatReceiverId}`)
+        .then(({ data }) => {
+          if (isActive && data.success) {
+            const profile = data.data;
+            setChatReceiver({
+              id: chatReceiverId,
+              name: [profile.firstName, profile.lastName].filter(Boolean).join(' '),
+            });
+          }
+        })
+        .catch(() => {});
+    }
+
+    return () => {
+      isActive = false;
+    };
+  }, [chatReceiverId, location.state?.receiverName]);
+
+  const chatReceiverName = location.state?.receiverName || (
+    chatReceiver.id === chatReceiverId ? chatReceiver.name : ''
+  );
 
   // Split path into segments and filter out empty strings
   const pathnames = location.pathname.split('/').filter((x) => x);
@@ -22,13 +51,16 @@ const Breadcrumb = () => {
 
         {pathnames.map((value, index) => {
           // Reconstruct the route path up to the current segment
-          const routeTo = `/${pathnames.slice(0, index + 1).join('>')}`;
+          const routeTo = `/${pathnames.slice(0, index + 1).join('/')}`;
           const isLast = index === pathnames.length - 1;
 
           // Capitalize and format path text (e.g., "dev-tinder" -> "Dev Tinder")
           const formattedName = value
             .replace(/-/g, ' ')
             .replace(/\b\w/g, (char) => char.toUpperCase());
+          const breadcrumbName = chatReceiverId && index === pathnames.length - 1
+            ? chatReceiverName || 'Chat'
+            : formattedName;
 
           return (
             <React.Fragment key={routeTo}>
@@ -36,7 +68,7 @@ const Breadcrumb = () => {
               <li>
                 {isLast ? (
                   // Current Active Page (not clickable)
-                  <span className="font-semibold text-base-content">{formattedName}</span>
+                  <span className="font-semibold text-base-content">{breadcrumbName}</span>
                 ) : (
                   // Parent Link
                   <Link to={routeTo} className="hover:underline text-primary font-medium">
