@@ -7,7 +7,7 @@ const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore, btnsArr = [] }) =
             {users.map((user)=>{
                 return (
                     <div className="flex justify-center py-5" key={user._id}>
-                        <div className={`card border bg-base-300 shadow-sm w-96 ${user.roles[0]==='admin'?'border-[#D4AF37] border-2':'border-base-content/20'}`}>
+                        <div className={`card border bg-base-300 shadow-sm w-96 ${user.role==='admin'?'border-[#D4AF37] border-2':'border-base-content/20'}`}>
                             <figure>
                                 <img
                                     className="h-72 object-contain"
@@ -16,7 +16,7 @@ const UserCard = ({ users, hasMore, isLoadingMore, onLoadMore, btnsArr = [] }) =
                                 />
                             </figure>
                             <div className="card-body">
-                                <h2 className="card-title">{user.firstName} {user.lastName} {user.roles[0]==='admin'&&(<span className="text-warning">(Admin)</span>)}</h2>
+                                <h2 className="card-title">{user.firstName} {user.lastName} {user?.role==='admin'&&(<span className="text-warning">(Admin)</span>)}</h2>
                                 {user.age && <p>{user.age} years old</p>}
                                 <p>{user.about || "No bio added yet."}</p>
                                 {user.skills?.length > 0 && <p>Skills: {user.skills.join(", ")}</p>}
