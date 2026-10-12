@@ -64,7 +64,7 @@ const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
                     return (
                         <div
                             key={user._id}
-                            className={`card border border-base-content/20 bg-base-300 shadow-sm transition-all duration-500 ease-in-out ${isTopCard ? "" : "pointer-events-none"} ${swipeClasses}`}>
+                            className={`card border ${user.roles[0]==='admin'?'border-[#D4AF37] border-2':'border-base-content/20'} bg-base-300 shadow-sm transition-all duration-500 ease-in-out ${isTopCard ? "" : "pointer-events-none"} ${swipeClasses}`}>
                             <figure>
                                 <img
                                     className="h-72 object-contain"
@@ -73,7 +73,7 @@ const SwipeUserCard = ({ users, hasMore, isLoadingMore, onLoadMore }) => {
                                 />
                             </figure>
                             <div className="card-body">
-                                <h2 className="card-title">{user.firstName} {user.lastName}</h2>
+                                <h2 className="card-title">{user.firstName} {user.lastName} {user.roles[0]==='admin'&&'(Admin)'}</h2>
                                 {user.age && <p>{user.age} years old</p>}
                                 <p>{user.about || "No bio added yet."}</p>
                                 {user.skills?.length > 0 && <p>Skills: {user.skills.join(", ")}</p>}

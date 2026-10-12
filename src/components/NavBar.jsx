@@ -42,10 +42,10 @@ const NavBar = () => {
           <input id="my-drawer-2" type="checkbox" className="drawer-toggle sm:hidden"
             checked={isOpen}
             onChange={(e) => setIsOpen(e.target.checked)} />
-          <div className="drawer-content flex flex-col">
+          <div className="drawer-content flex bg-base-300 items-center px-4 sm:px-6">
             {/* Navbar */}
-            <div className="navbar bg-base-300 w-full">
-              <div className="flex-none sm:hidden">
+            <div className="navbar p-0">
+              <div className="flex-none mr-4 sm:hidden">
                 <label htmlFor="my-drawer-2" aria-label="open sidebar" className="btn btn-square btn-ghost drawer-button">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -64,10 +64,10 @@ const NavBar = () => {
               </div>
               <div className="flex-1">
 
-                <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-primary">💻 DevTinder</Link>
+                <Link to="/" className="btn btn-ghost text-2xl font-bold tracking-tight text-primary p-0">💻 DevTinder</Link>
 
               </div>
-              <div className="hidden flex-none px-4 sm:block">
+              <div className={`hidden flex-none sm:block ${loggedIn && 'sm:flex sm:items-center'}`}>
                 <ul className="menu menu-horizontal items-center p-0">
                   {/* Navbar menu content here */}
 
@@ -104,6 +104,9 @@ const NavBar = () => {
                 </ul>
               </div>
             </div>
+            {loggedIn && <Link to="/search" className="cursor-pointer">
+              <svg fill="currentColor" width="35px" height="35px" viewBox="-2.5 -2.5 24 24" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin" className="jam jam-search"><path d='M8 14A6 6 0 1 0 8 2a6 6 0 0 0 0 12zm6.32-1.094l3.58 3.58a1 1 0 1 1-1.415 1.413l-3.58-3.58a8 8 0 1 1 1.414-1.414z'/></svg>
+            </Link>}
           </div>
           <div className="drawer-side">
             <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
